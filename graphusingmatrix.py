@@ -41,37 +41,56 @@ class GraphUsingMatrix:
             end_index = self.vertices.index(end_vertex)
             self.adj_matrix[start_index][end_index] = 0
 
-    def bfs(self):
+        def bfs(self):
+        if not self.vertices:
+            return []
+
         visited = []
-        queue = deque([self.start_vertex])
+        queue = deque()
+        remaining_vertices = set(self.vertices)
 
-        while queue:
-            vertex = queue.popleft()
-            visited.append(vertex)
+        while remaining_vertices:
+            start_vertex = remaining_vertices.pop()
+            visited.append(start_vertex)
+            queue.append(start_vertex)
 
-            vertex_index = self.vertices.index(vertex)
-            neighbors = [self.vertices[i] for i in range(len(self.vertices)) if self.adj_matrix[vertex_index][i] == 1]
+            while queue:
+                vertex = queue.popleft()
+                vertex_index = self.vertices.index(vertex)
+                neighbors = [self.vertices[i] for i in range(len(self.vertices)) if self.adj_matrix[vertex_index][i] == 1]
 
-            for neighbor in neighbors:
-                if neighbor not in visited and neighbor not in queue:
-                    queue.append(neighbor)
+                for neighbor in neighbors:
+                    if neighbor not in visited:
+                        visited.append(neighbor)
+                        queue.append(neighbor)
+                        remaining_vertices.discard(neighbor)
 
         return visited
 
+
     def dfs(self):
+        if not self.vertices:
+            return []
+
         visited = []
-        stack = deque([self.start_vertex])
+        stack = deque()
+        remaining_vertices = set(self.vertices)
 
-        while stack:
-            vertex = stack.pop()
-            visited.append(vertex)
+        while remaining_vertices:
+            start_vertex = remaining_vertices.pop()
+            visited.append(start_vertex)
+            stack.append(start_vertex)
 
-            vertex_index = self.vertices.index(vertex)
-            neighbors = [self.vertices[i] for i in range(len(self.vertices)) if self.adj_matrix[vertex_index][i] == 1]
+            while stack:
+                vertex = stack.pop()
+                vertex_index = self.vertices.index(vertex)
+                neighbors = [self.vertices[i] for i in range(len(self.vertices)) if self.adj_matrix[vertex_index][i] == 1]
 
-            for neighbor in neighbors:
-                if neighbor not in visited and neighbor not in stack:
-                    stack.append(neighbor)
+                for neighbor in neighbors:
+                    if neighbor not in visited:
+                        visited.append(neighbor)
+                        stack.append(neighbor)
+                        remaining_vertices.discard(neighbor)
 
         return visited
 
